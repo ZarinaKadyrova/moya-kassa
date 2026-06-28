@@ -1,18 +1,14 @@
-// src/firebase.js
-// ⚠️  ИНСТРУКЦИЯ: замените значения ниже на ваши из Firebase Console
-// Перейдите: https://console.firebase.google.com
-// → Создайте проект → Web app → скопируйте firebaseConfig
-
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "ВСТАВЬТЕ_ВАШ_API_KEY",
-  authDomain: "ВСТАВЬТЕ_ВАШ_AUTH_DOMAIN",
-  projectId: "ВСТАВЬТЕ_ВАШ_PROJECT_ID",
-  storageBucket: "ВСТАВЬТЕ_ВАШ_STORAGE_BUCKET",
-  messagingSenderId: "ВСТАВЬТЕ_ВАШ_MESSAGING_SENDER_ID",
-  appId: "ВСТАВЬТЕ_ВАШ_APP_ID"
+  apiKey: "AIzaSyDFbduiYLKkgHusrQJLm0-FspLJXT39XEc",
+  authDomain: "moya-kassa.firebaseapp.com",
+  projectId: "moya-kassa",
+  storageBucket: "moya-kassa.firebasestorage.app",
+  messagingSenderId: "809332802472",
+  appId: "1:809332802472:web:49031f8fcb9ab25b3dd39d",
+  measurementId: "G-QQFKMBJWVW"
 };
 
 const app = initializeApp(firebaseConfig);
