@@ -6,16 +6,24 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
-// Generic real-time collection hook — sorted by date field, then createdAt
+// Generic real-time collection hook — ordered by date desc
 export function useCollection(collName) {
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Order by date desc, then createdAt desc for same-day entries
-    const q = query(collection(db, collName), orderBy('date', 'desc'), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, collName), orderBy('date', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
-      setDocs(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      // Client-side sort: by date desc, then by createdAt desc for same day
+      const sorted = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          const ta = a.createdAt?.seconds || 0;
+          const tb = b.createdAt?.seconds || 0;
+          return tb - ta;
+        });
+      setDocs(sorted);
       setLoading(false);
     }, (err) => {
       console.error('Firestore error:', err);
@@ -44,9 +52,17 @@ export function useExchanges() {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, 'exchanges'), orderBy('date', 'desc'), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'exchanges'), orderBy('date', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
-      setDocs(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const sorted = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          const ta = a.createdAt?.seconds || 0;
+          const tb = b.createdAt?.seconds || 0;
+          return tb - ta;
+        });
+      setDocs(sorted);
     }, (err) => console.error(err));
     return unsub;
   }, []);
